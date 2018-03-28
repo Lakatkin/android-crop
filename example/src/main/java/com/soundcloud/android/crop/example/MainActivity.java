@@ -1,6 +1,6 @@
 package com.soundcloud.android.crop.example;
 
-import com.soundcloud.android.crop.Crop;
+import com.soundcloud.android.crop.CropWithRotation;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_select) {
             resultView.setImageDrawable(null);
-            Crop.pickImage(this);
+            CropWithRotation.pickImage(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -42,23 +42,23 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent result) {
-        if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
+        if (requestCode == CropWithRotation.REQUEST_PICK && resultCode == RESULT_OK) {
             beginCrop(result.getData());
-        } else if (requestCode == Crop.REQUEST_CROP) {
+        } else if (requestCode == CropWithRotation.REQUEST_CROP) {
             handleCrop(resultCode, result);
         }
     }
 
     private void beginCrop(Uri source) {
         Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
-        Crop.of(source, destination).asSquare().start(this);
+        CropWithRotation.of(source, destination).asSquare().start(this);
     }
 
     private void handleCrop(int resultCode, Intent result) {
         if (resultCode == RESULT_OK) {
-            resultView.setImageURI(Crop.getOutput(result));
-        } else if (resultCode == Crop.RESULT_ERROR) {
-            Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
+            resultView.setImageURI(CropWithRotation.getOutput(result));
+        } else if (resultCode == CropWithRotation.RESULT_ERROR) {
+            Toast.makeText(this, CropWithRotation.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

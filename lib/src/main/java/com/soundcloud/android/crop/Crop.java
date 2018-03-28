@@ -11,6 +11,8 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
+import static com.soundcloud.android.crop.Crop.Extra.REMOVE_ORIGINAL_KEY;
+
 /**
  * Builder for crop Intents and utils for handling result
  */
@@ -27,9 +29,10 @@ public class Crop {
         String MAX_Y = "max_y";
         String AS_PNG = "as_png";
         String ERROR = "error";
+        String REMOVE_ORIGINAL_KEY = "REMOVE_ORIGINAL_KEY";
     }
 
-    private Intent cropIntent;
+    protected Intent cropIntent;
 
     /**
      * Create a crop Intent builder with source and destination image Uris
@@ -41,7 +44,7 @@ public class Crop {
         return new Crop(source, destination);
     }
 
-    private Crop(Uri source, Uri destination) {
+    protected Crop(Uri source, Uri destination) {
         cropIntent = new Intent();
         cropIntent.setData(source);
         cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, destination);
@@ -169,6 +172,11 @@ public class Crop {
      */
     public static Uri getOutput(Intent result) {
         return result.getParcelableExtra(MediaStore.EXTRA_OUTPUT);
+    }
+
+    public Crop removeOriginal(boolean remove) {
+            cropIntent.putExtra(REMOVE_ORIGINAL_KEY, remove);
+        return this;
     }
 
     /**
